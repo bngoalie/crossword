@@ -20,9 +20,29 @@ letters for next char
 
 prefix -> ((possible letters) ^ (is it shared) ^ (end of word))
 """
+import sys
 
+# Make sure args are correct
+def get_args():
+	if len(sys.argv) != 3:
+		sys.stderr.write("Incorrect number of args")
+		sys.exit(1)
+	else:
+
+		return [str(sys.argv[1]), str(sys.argv[2])]
+
+# Takes the wordlist, returns the trie of words
+def make_trie(wordlist):
+	f = open(wordlist)
+	for line in f:
+		# add to trie
+		print line
+	f.close()
+
+# encode everything
 def main():
-	print "Crossword"
+	fromarg = get_args()
+	print (fromarg[0] + " " +  fromarg[1])
 
 if __name__ == '__main__':
 	main()

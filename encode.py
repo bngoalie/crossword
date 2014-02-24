@@ -32,12 +32,12 @@ def inner_loop(key, row, col, direction):
 		if key[0] != "":
 			for i in range(len(key[0])):
 				if i == (len(key[0]) - 1):
-					if direction == "H"
+					if direction == "H":
 						print("~" + key[0][i] + str(row) + "_" + str(col - len(key[0]) + i + 1)),
 					else
 						print("~" + key[0][i] + str(row - len(key[0]) + i + 1) + "_" + str(col)),
 				else:
-					if direction == "H"
+					if direction == "H":
 						print("~" + key[0][i] + str(row) + "_" + str(col - len(key[0]) + i + 1) + " v "),
 					else
 						print("~" + key[0][i] + str(row - len(key[0]) + i + 1) + "_" + str(col) + " v "),

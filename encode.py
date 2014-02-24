@@ -65,6 +65,7 @@ def horiz_outer_loop():
 			elif counter > 0:
 				print("~#" + str(r) + "_" + str(c - counter - 1)),
 				inner_loop(("", counter), r, (c - counter - 1), "H")
+				counter = 0
 			else:
 				counter = 0
 
@@ -77,6 +78,7 @@ def vert_outer_loop():
 			elif counter > 0:
 				print("~#" + str(r - counter - 1) + "_" + str(c)),
 				inner_loop(("", counter), (r - counter - 1), c, "V")
+				counter = 0
 			else:
 				counter = 0
 

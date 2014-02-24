@@ -27,8 +27,6 @@ def print_set_variables():
 
 # helper for outer loops
 def inner_loop(key, row, col, direction):
-	current_row = row
-	current_col = col
 	lst = Glob.trie_dict.get(key)
 	# if len(lst) == 0:
 	# 	print(" v " + key[0][-1] + str(row) + "_" + str(col)),
@@ -37,12 +35,10 @@ def inner_loop(key, row, col, direction):
 			print("~" + key[0][-1] + str(row) + "_" + str(col)),
 		for letter in lst:
 			if direction == "H":
-				current_col = current_col + 1
-				print(" v " + letter + str(row) + "_" + str(current_col)),
+				print(" v " + letter + str(row) + "_" + str(col + 1)),
 				# inner_loop((key[0] + letter, key[1]), row, col + 1, direction)
 			else:
-				current_row = current_row + 1
-				print(" v " + letter + str(current_row) + "_" + str(col)),
+				print(" v " + letter + str(row + 1) + "_" + str(col)),
 				# inner_loop((key[0] + letter, key[1]), row + 1, col, direction)
 			# if key[0] != "":
 			# 	print(" v ~" + key[0][-1] + str(row) + "_" + str(col)),

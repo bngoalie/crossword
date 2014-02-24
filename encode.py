@@ -9,7 +9,6 @@ Crossword SAT Encoder
 import sys
 from sets import Set
 
-# Make sure args are correct
 class Glob:
 	cross = [] #stores crossword elements at [r][c]
 	hashmtrx = [] # stores list of possible values at [r][c]
@@ -18,43 +17,69 @@ class Glob:
 	m_col = 0 # grid col size
 
 def print_set_variables():
-	for r in range(m_row):
-		for c in range(m_col):
-			if Glob.hashmtrx[r][c] != ".":
-				if (r == m_row and c == c_row):
-					print Glob.hashmtrx[r][c] + r + "_" + c
+	for r in range(Glob.m_row):
+		for c in range(Glob.m_col):
+			if Glob.cross[(r * Glob.m_row) + c] != ".":
+				if (r == Glob.m_row -1 and c == Glob.m_row -1):
+					print(Glob.cross[(r * Glob.m_row) + c] + str(r) + "_" + str(c)),
 				else:
-					print Glob.hashmtrx[r][c] + r + "_" + c + " & "
+					print(Glob.cross[(r * Glob.m_row) + c] + str(r) + "_" + str(c) + " &\n"),
 
+# helper for outer loops
 def inner_loop(key, row, col, direction):
-	if direction == "H":
-		col = col + 1
-	else:
-		row = row + 1
+	# print "ROW: " + str(row) + " COL: " + str(col)
 	lst = Glob.trie_dict.get(key)
 	if len(lst) == 0:
-		print " v ~" + key[0][-1] + row + "_" + col
+		print(" v " + key[0][-1] + str(row) + "_" + str(col)),
 	else:
 		for letter in lst:
-			inner_loop((key[0] + letter, key[1]), row, col, direction)
+			if direction == "H":
+				inner_loop((key[0] + letter, key[1]), row, col + 1, direction)
+			else:
+				inner_loop((key[0] + letter, key[1]), row + 1, col, direction)
 			if key[0] != "":
-				print " v " + key[0][-1] + row + "_" + col
+				print(" v ~" + key[0][-1] + str(row) + "_" + str(col)),
 	if key[0] != "":
-		if not (key[0] in Glob.hashmtrx[row][col]):
-			Glob.hashmtrx[row][col].append(key[0])
+		if not (key[0] in Glob.hashmtrx[(row * Glob.m_row) + col]):
+			Glob.hashmtrx[(row * Glob.m_row) + col].append(key[0])
 
 def horiz_outer_loop():
-	for r in range(m_row):
-		for c in range(m_col):
-			counter = 0
-			if Glob.crossmtrx[r][c] != "#":
+	for r in range(Glob.m_row):
+		counter = 0
+		for c in range(Glob.m_col):
+			if Glob.cross[(r * Glob.m_row) + c] != "#":
 				counter = counter + 1
 			elif counter > 0:
-				print " ~#" + r + "_" + (c - counter - 1)
-				inner_loop(("", counter), "H", r, (c - counter))
-				print " &"
+				print(" ~#" + str(r) + "_" + str(c - counter - 1)),
+				inner_loop(("", counter), r, (c - counter - 1), "H")
+				print(" &\n"),
 			else:
 				counter = 0
+
+def vert_outer_loop():
+	for c in range(Glob.m_col):
+		counter = 0
+		for r in range(Glob.m_row):
+			if Glob.cross[(r * Glob.m_row) + c] != "#":
+				counter = counter + 1
+			elif counter > 0:
+				print(" ~#" + str(r - counter - 1) + "_" + str(c)),
+				inner_loop(("", counter), (r - counter - 1), c, "V")
+				print(" &\n"),
+			else:
+				counter = 0
+
+def one_per_block():
+	for r in range(Glob.m_row):
+		for c in range (Glob.m_col):
+			for i in range( len(Glob.hashmtrx[(r * Glob.m_row) + c]) - 1 ):
+				for j in range (i + 1, len(Glob.hashmtrx[(r * Glob.m_row) + c])):
+					print("~" + Glob.hashmtrx[(r * Glob.m_row) + c][i] + str(r) + "_" + str(c) + " v ~" + Glob.hashmtrx[(r * Glob.m_row) + c][j] + str(r) + "_" + str(c) + " &\n"),
+			for item in Glob.hashmtrx[(r * Glob.m_row) + c]:
+				if item == Glob.hashmtrx[(r * Glob.m_row) + c][len(Glob.hashmtrx[(r * Glob.m_row) + c]) -1]:
+					print(item + str(r) + "_" + str(c) + " &\n"),
+				else:
+					print(item + str(r) + "_" + str(c) + " v "),
 
 # helper method for making our "trie"
 def tries(prefix, length, rest):
@@ -82,12 +107,13 @@ def make_trie(wordlist):
 def make_crossmtrx(puzzle):
 	f = open(puzzle)
 	items = f.readline().split()
-	Glob.m_row = items[0]
-	Glob.m_col = items[1]
+	Glob.m_row = int(items[0])
+	Glob.m_col = int(items[1])
 	for line in f:
 		line = line.strip()
 		for char in line:
 			Glob.cross.append(char)
+	Glob.hashmtrx = [ [] for i in range(Glob.m_row * Glob.m_col)]
 
 def get_args():
 	# checks that arguments are correct
@@ -106,6 +132,10 @@ def main():
 	make_trie(wordlist) # set up the dictionary list
 	make_crossmtrx(puzzle)
 
+	horiz_outer_loop()
+	vert_outer_loop()
+	one_per_block()
+	print_set_variables() # working
 
 
 if __name__ == '__main__':

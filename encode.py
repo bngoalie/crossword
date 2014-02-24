@@ -27,7 +27,6 @@ def print_set_variables():
 
 # helper for outer loops
 def inner_loop(key, row, col, direction):
-	# print "ROW: " + str(row) + " COL: " + str(col)
 	lst = Glob.trie_dict.get(key)
 	if len(lst) == 0:
 		print(" v " + key[0][-1] + str(row) + "_" + str(col)),
@@ -40,7 +39,7 @@ def inner_loop(key, row, col, direction):
 			if key[0] != "":
 				print(" v ~" + key[0][-1] + str(row) + "_" + str(col)),
 	if key[0] != "":
-		if not (key[0] in Glob.hashmtrx[(row * Glob.m_row) + col]):
+		if not (key[0][-1] in Glob.hashmtrx[(row * Glob.m_row) + col]):
 			Glob.hashmtrx[(row * Glob.m_row) + col].append(key[0][-1])
 
 def horiz_outer_loop():

@@ -31,7 +31,7 @@ def inner_loop(key, row, col, direction):
 	if len(lst) != 0:
 		if key[0] != "":
 			for i in range(len(key[0])):
-				if key[0][i] == key[0][-1]:
+				if i == (len(key[0]) - 1):
 					print("~" + key[0][i] + str(row) + "_" + str(col)),
 				else:
 					print("~" + key[0][i] + str(row) + "_" + str(col) + " v "),

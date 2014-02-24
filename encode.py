@@ -41,7 +41,7 @@ def inner_loop(key, row, col, direction):
 				print(" v ~" + key[0][-1] + str(row) + "_" + str(col)),
 	if key[0] != "":
 		if not (key[0] in Glob.hashmtrx[(row * Glob.m_row) + col]):
-			Glob.hashmtrx[(row * Glob.m_row) + col].append(key[0])
+			Glob.hashmtrx[(row * Glob.m_row) + col].append(key[0][-1])
 
 def horiz_outer_loop():
 	for r in range(Glob.m_row):

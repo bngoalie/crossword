@@ -28,20 +28,18 @@ def print_set_variables():
 # helper for outer loops
 def inner_loop(key, row, col, direction):
 	lst = Glob.trie_dict.get(key)
-	# if len(lst) == 0:
-	# 	print(" v " + key[0][-1] + str(row) + "_" + str(col)),
 	if len(lst) != 0:
 		if key[0] != "":
-			print("~" + key[0][-1] + str(row) + "_" + str(col)),
+			for i in range(len(key[0])):
+				if key[0][i] == key[0][-1]:
+					print("~" + key[0][i] + str(row) + "_" + str(col)),
+				else:
+					print("~" + key[0][i] + str(row) + "_" + str(col) + " v "),
 		for letter in lst:
 			if direction == "H":
 				print(" v " + letter + str(row) + "_" + str(col + 1)),
-				# inner_loop((key[0] + letter, key[1]), row, col + 1, direction)
 			else:
 				print(" v " + letter + str(row + 1) + "_" + str(col)),
-				# inner_loop((key[0] + letter, key[1]), row + 1, col, direction)
-			# if key[0] != "":
-			# 	print(" v ~" + key[0][-1] + str(row) + "_" + str(col)),
 		print(" &\n"),
 		for letter in lst:
 			if direction == "H":
@@ -61,7 +59,6 @@ def horiz_outer_loop():
 			elif counter > 0:
 				print("~#" + str(r) + "_" + str(c - counter - 1)),
 				inner_loop(("", counter), r, (c - counter - 1), "H")
-				# print(" &\n"),
 			else:
 				counter = 0
 
@@ -72,9 +69,8 @@ def vert_outer_loop():
 			if Glob.cross[(r * Glob.m_row) + c] != "#":
 				counter = counter + 1
 			elif counter > 0:
-				print(" ~#" + str(r - counter - 1) + "_" + str(c)),
+				print("~#" + str(r - counter - 1) + "_" + str(c)),
 				inner_loop(("", counter), (r - counter - 1), c, "V")
-				# print(" &\n"),
 			else:
 				counter = 0
 

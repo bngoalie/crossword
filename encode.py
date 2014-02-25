@@ -91,9 +91,9 @@ def one_per_block():
 					print("~" + Glob.hashmtrx[(r * Glob.m_row) + c][i] + "_" + str(r) + "_" + str(c) + " v ~" + Glob.hashmtrx[(r * Glob.m_row) + c][j] + "_" + str(r) + "_" + str(c) + " &\n"),
 			for item in Glob.hashmtrx[(r * Glob.m_row) + c]:
 				if item == Glob.hashmtrx[(r * Glob.m_row) + c][len(Glob.hashmtrx[(r * Glob.m_row) + c]) -1]:
-					print(item + str(r) + "_" + str(c) + " &\n"),
+					print(item + "_" + str(r) + "_" + str(c) + " &\n"),
 				else:
-					print(item + str(r) + "_" + str(c) + " v "),
+					print(item + "_" + str(r) + "_" + str(c) + " v "),
 
 # helper method for making our "trie"
 def tries(prefix, length, rest):

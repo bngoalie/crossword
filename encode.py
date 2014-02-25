@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 Crossword SAT Encoder
 @AUTHORS: Jeremy Dolinko & Ben Glickman
@@ -5,7 +6,6 @@ Crossword SAT Encoder
               and returns the CNF encoding that can be used by
               zchaff.
 """
-
 import sys
 from sets import Set
 

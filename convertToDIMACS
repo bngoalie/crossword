@@ -1,0 +1,117 @@
+#!/usr/bin/env perl
+######################################################
+# convertToDIMACS
+#
+# Written by John Blatz for JHU CS 325/425
+# Professor Jason Eisner
+# 9 February 2005
+# Modified 20 February 2005
+# Modified 5 February 2010
+# Modified 16 February 2011
+######################################################
+# This script will convert CNF files in a more 
+# "user-friendly" format into the DIMACS standard
+# for use in a SAT solver.
+# 
+# The format that this script accepts is as follows:
+#    literal v literal v ... v literal & 
+#    literal v literal v ... v literal &
+#	...
+#    literal v literal v ... v literal
+#
+# where each instance of "literal" is an alphanumeric 
+# string representing the name of the variable,
+# optionally preceded by "~".
+#
+# As you expect, "~" means "not", "v" means "or", 
+# and "&" means "and".  Parentheses are not used,
+# and as a result in this format "or" has higher 
+# precedence than "and", even though it's the other
+# way around in C++.
+#
+# For obvious reasons, you are not allowed to have a 
+# variable named "v".  Variables are additionally not 
+# allowed to be named "0", or contain any of the 
+# following characters: "-~()&^".
+#
+# Note: This script also accepts files already in
+# DIMACS CNF format, not affecting any change to them
+# except for possibly permuting the variable indices.
+# This means that if you want to have your "encode"
+# and "decode" programs work directly with DIMACS CNF
+# format rather than this one, you can.
+#
+# Note (2): You may optionally include an "&" symbol
+# at the end of the last clause.  This may make it 
+# easier to generate formulas automatically.
+#
+# Note (3): Asking the program to convert empty clauses
+# will result in wildly unstable behavior, probably
+# causing UBC-SAT to crash.  Avoid encodings with
+# consecutive multiple ^'s, &'s, or 0's.  
+# 
+# The DIMACS CNF format file will be output to STDOUT,
+# and a file ending in ".key" will be created that
+# records the mapping between your variable names
+# and the indices in the DIMACS file.  The ".key" file
+# will be used later by the script convertBack.pl.
+#
+# If you redirect the output into a .cnf file, you can pass
+# it directly into a SAT solver such as zchaff.
+######################################################
+
+$file = shift or die "usage: perl convertToDIMACS filename\n";
+open FILE, $file or die "error: cannot open $file\n";
+
+$file =~ s/\.[^.]*$//;
+
+my %hash;
+$hash{"&"} = 0;
+$hash{"0"} = 0;
+
+$clauses = 0;
+while(<FILE>) {
+	next if /^c\s+/ or /^p\s+/;
+	tr/\^\(\)~-/&/d;
+	s/\s+v\s+/ /g;
+	++$clauses while /(?:^|\s)(?:&|0)(?=\s|$)/gc;
+
+	s/^\s*//g;
+	foreach (split /\s+/) {
+		$hash{$_} = scalar(keys(%hash))-1 unless exists $hash{$_};
+		$lastout = $hash{$_}
+	}	
+}
+++$clauses if $lastout;
+
+open KEY, "> $file.key" or die "can't open $file.key for output";
+foreach $key (keys(%hash)) {
+	print KEY $key;
+	print KEY " ";
+	print KEY $hash{$key};
+	print KEY "\n";
+}
+
+print "c $file.cnf\n";
+print "c Auto-generated DIMACS CNF file created by convertToDIMACS\n";
+print "p cnf ";
+print scalar(keys(%hash)) - 2;
+print " $clauses\n";
+
+seek FILE, 0, 0;
+while(<FILE>) {
+	next if /^c\s+/ or /^p\s+/;
+	tr/\^\(\)/&/d;
+	s/\s+v\s+/ /g;
+	s/^\s*//g;
+	foreach (split /\s+/) {
+		$neg = s/~//g || s/^-//g;
+		print "-" if $neg;
+		$lastout = $hash{$_};
+		print "$lastout ";
+		print "\n" if ($lastout == 0);
+	}	
+}
+print "0\n" if $lastout;
+
+

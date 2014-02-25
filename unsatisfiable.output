@@ -1,0 +1,21 @@
+Z-Chaff Version: zChaff 2007.3.12
+Solving unsatisfiable.cnf ......
+ CONFLICT during preprocess 
+
+Instance Unsatisfiable
+Random Seed Used				0
+Max Decision Level				0
+Num. of Decisions				0
+( Stack + Vsids + Shrinking Decisions )		0 + 0 + 0
+Original Num Variables				246
+Original Num Clauses				4023
+Original Num Literals				12694
+Added Conflict Clauses				0
+Num of Shrinkings				0
+Deleted Conflict Clauses			0
+Deleted Clauses					0
+Added Conflict Literals				0
+Deleted (Total) Literals			0
+Number of Implication				62
+Total Run Time					0
+RESULT:	UNSAT

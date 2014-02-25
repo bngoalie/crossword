@@ -19,7 +19,6 @@ def workout_encoding(answerfile):
 			#words in x_num_num -> [x,num,num]
 			word = word.strip()
 			lst = word.split("_")
-			print lst
 			row = int(lst[1])
 			col = int(lst[2])
 			if len(Globs.cross[(row * Globs.m_row) + col]) != 0:

@@ -21,9 +21,10 @@ def print_set_variables():
 		for c in range(Glob.m_col):
 			if Glob.cross[(r * Glob.m_row) + c] != ".":
 				if (r == Glob.m_row -1 and c == Glob.m_row -1):
-					print(Glob.cross[(r * Glob.m_row) + c] + str(r) + "_" + str(c)),
+					print(Glob.cross[(r * Glob.m_row) + c] + "_" + str(r) + "_" + str(c)),
 				else:
-					print(Glob.cross[(r * Glob.m_row) + c] + str(r) + "_" + str(c) + " &\n"),
+					print(Glob.cross[(r * Glob.m_row) + c] + "_" + str(r) + "_" + str(c) + " &\n"),
+
 
 # helper for outer loops
 def inner_loop(key, row, col, direction):
@@ -33,19 +34,19 @@ def inner_loop(key, row, col, direction):
 			for i in range(len(key[0])):
 				if i == (len(key[0]) - 1):
 					if direction == "H":
-						print("~" + key[0][i] + str(row) + "_" + str(col - len(key[0]) + i + 1)),
+						print("~" + key[0][i] + "_" + str(row) + "_" + str(col - len(key[0]) + i + 1)),
 					else:
-						print("~" + key[0][i] + str(row - len(key[0]) + i + 1) + "_" + str(col)),
+						print("~" + key[0][i] + "_" + str(row - len(key[0]) + i + 1) + "_" + str(col)),
 				else:
 					if direction == "H":
-						print("~" + key[0][i] + str(row) + "_" + str(col - len(key[0]) + i + 1) + " v "),
+						print("~" + key[0][i] + "_" + str(row) + "_" + str(col - len(key[0]) + i + 1) + " v "),
 					else:
-						print("~" + key[0][i] + str(row - len(key[0]) + i + 1) + "_" + str(col) + " v "),
+						print("~" + key[0][i] + "_" + str(row - len(key[0]) + i + 1) + "_" + str(col) + " v "),
 		for letter in lst:
 			if direction == "H":
-				print(" v " + letter + str(row) + "_" + str(col + 1)),
+				print(" v " + letter + "_" + str(row) + "_" + str(col + 1)),
 			else:
-				print(" v " + letter + str(row + 1) + "_" + str(col)),
+				print(" v " + letter + "_" + str(row + 1) + "_" + str(col)),
 		print(" &\n"),
 		for letter in lst:
 			if direction == "H":
@@ -63,7 +64,7 @@ def horiz_outer_loop():
 			if Glob.cross[(r * Glob.m_row) + c] != "#":
 				counter = counter + 1
 			elif counter > 0:
-				print("~#" + str(r) + "_" + str(c - counter - 1)),
+				print("~#" + "_" + str(r) + "_" + str(c - counter - 1)),
 				inner_loop(("", counter), r, (c - counter - 1), "H")
 				counter = 0
 			else:
@@ -76,7 +77,7 @@ def vert_outer_loop():
 			if Glob.cross[(r * Glob.m_row) + c] != "#":
 				counter = counter + 1
 			elif counter > 0:
-				print("~#" + str(r - counter - 1) + "_" + str(c)),
+				print("~#" + "_" + str(r - counter - 1) + "_" + str(c)),
 				inner_loop(("", counter), (r - counter - 1), c, "V")
 				counter = 0
 			else:
@@ -87,7 +88,7 @@ def one_per_block():
 		for c in range (Glob.m_col):
 			for i in range( len(Glob.hashmtrx[(r * Glob.m_row) + c]) - 1 ):
 				for j in range (i + 1, len(Glob.hashmtrx[(r * Glob.m_row) + c])):
-					print("~" + Glob.hashmtrx[(r * Glob.m_row) + c][i] + str(r) + "_" + str(c) + " v ~" + Glob.hashmtrx[(r * Glob.m_row) + c][j] + str(r) + "_" + str(c) + " &\n"),
+					print("~" + Glob.hashmtrx[(r * Glob.m_row) + c][i] + "_" + str(r) + "_" + str(c) + " v ~" + Glob.hashmtrx[(r * Glob.m_row) + c][j] + "_" + str(r) + "_" + str(c) + " &\n"),
 			for item in Glob.hashmtrx[(r * Glob.m_row) + c]:
 				if item == Glob.hashmtrx[(r * Glob.m_row) + c][len(Glob.hashmtrx[(r * Glob.m_row) + c]) -1]:
 					print(item + str(r) + "_" + str(c) + " &\n"),
@@ -148,7 +149,7 @@ def main():
 	horiz_outer_loop()
 	vert_outer_loop()
 	one_per_block()
-	print_set_variables() # working
+	print_set_variables()
 
 
 if __name__ == '__main__':

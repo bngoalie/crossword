@@ -12,11 +12,7 @@ class Globs:
 	m_col = 0
 
 def workout_encoding(answerfile):
-<<<<<<< HEAD
-	Globs.cross = ["#" for i in range(Globs.m_row * Globs.m_col)]
-=======
 	Globs.cross = [[] for i in range(Globs.m_row * Globs.m_col)]
->>>>>>> d9b3d7c22f42c8403746298447bef53170543589
 	f = open(answerfile)
 	for word in f:
 		if not ("-" in word):
@@ -26,15 +22,9 @@ def workout_encoding(answerfile):
 			print lst
 			row = int(lst[1])
 			col = int(lst[2])
-<<<<<<< HEAD
-			if Globs.cross[row*Globs.m_row + col] != "":
-				print "TWO ITEMS IN SAME SPOT?"
-			Globs.cross[row*Globs.m_row + col] = lst[0]
-=======
 			if len(Globs.cross[(row * Globs.m_row) + col]) != 0:
 				print "TWO ITEMS IN SAME SPOT?"
 			Globs.cross[(Globs.m_row * row) + col].append(lst[0])
->>>>>>> d9b3d7c22f42c8403746298447bef53170543589
 	f.close()
 	for i in range (Globs.m_row * Globs.m_col):
 			if (i % Globs.m_col == Globs.m_col-1):

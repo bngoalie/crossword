@@ -4,7 +4,7 @@ Crossword SAT Decoder
 @DESCRIPTION: Takes in the output from the .ans file and
               prints out the item
 """
-import sys
+import sys, os
 
 class Globs:
 	cross = []
@@ -13,13 +13,15 @@ class Globs:
 
 def workout_encoding(answerfile):
 	Globs.cross = [[] for i in range(Globs.m_row * Globs.m_col)]
+	if os.stat(answerfile)[6] == 0:
+		print "UNSAT"
+		sys.exit(0)
 	f = open(answerfile)
 	for word in f:
 		if not ("-" in word):
 			#words in x_num_num -> [x,num,num]
 			word = word.strip()
 			lst = word.split("_")
-			print lst
 			row = int(lst[1])
 			col = int(lst[2])
 			if len(Globs.cross[(row * Globs.m_row) + col]) != 0:

@@ -1,0 +1,34 @@
+#!/usr/local/bin/bash
+
+dir=/tmp/`whoami`.hw1    # temp files go here in scratch space (don't use $$ since we want new runs to overwrite old)
+prefix=$dir/${1##*/}     # mydir/puzzle becomes /tmp/user.hw1/puzzle
+mkdir --mode 700 --parents $dir
+
+delay=10
+trap "{ rm -rf $prefix.* ; exit 255 ; }" SIGINT SIGTERM  # clean up immediately if user aborts
+
+TIMEFORMAT="   (runtime was %lR)"
+
+echo "Encoding...." 1>&2
+time ./encode $1.puzzle $2 > $prefix.enc
+echo "   (see encoder output in $prefix.enc)" 1>&2
+
+echo "Converting...." 1>&2
+time convertToDIMACS $prefix.enc > $prefix.cnf
+
+echo "Solving..." 1>&2
+time /usr/local/data/cs325/hw1/ubcsat -solve -alg walksat -i $prefix.cnf > $prefix.output 
+echo "   (see solver details in $prefix.output)" 1>&2
+
+echo "Converting back ..." 1>&2
+trimoutput.pl $prefix.output > $prefix.trimmed
+convertBack.pl $prefix.trimmed $prefix.key > $prefix.ans
+
+echo "Decoding..." 1>&2
+echo "   (see decoder input in $prefix.ans)" 1>&2
+./decode $1.puzzle $prefix.ans   # print result
+
+[ -f resolve_trace ] && mv resolve_trace $dir    # temp file apparently created in working dir by zChaff
+sleep 1; touch $prefix.$$                        # marker file: don't delete files that are modified again after this
+echo bash -c \'"for f in $prefix.* ; do if [ \$f -ot $prefix.$$ ] ; then rm -f \$f ; fi ; done; rm -f $prefix.$$"\' | at now + $delay minutes 2>/dev/null    # ordinary exit, so clean up in a little while, after the user has had a chance to inspect intermediate files
+echo "Temporary files $prefix.* will be deleted in $delay minutes." 1>&2

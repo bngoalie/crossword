@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 Crossword SAT Decoder
 @AUTHORS: Jeremy Dolinko & Ben Glickman

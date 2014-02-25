@@ -19,10 +19,10 @@ def workout_encoding(answerfile):
 		sys.exit(0)
 	f = open(answerfile)
 	for word in f:
-		if not ("-" in word):
-			# words in x_num_num -> [x,num,num]
-			lst = word.split()
-			for item in lst:
+		# words in x_num_num -> [x,num,num]
+		lst = word.split()
+		for item in lst:
+			if not ("-" in item):
 				item = item.split("_")
 				row = int(item[1])
 				col = int(item[2])

@@ -12,24 +12,35 @@ class Globs:
 	m_col = 0
 
 def workout_encoding(answerfile):
+<<<<<<< HEAD
 	Globs.cross = ["#" for i in range(Globs.m_row * Globs.m_col)]
+=======
+	Globs.cross = [[] for i in range(Globs.m_row * Globs.m_col)]
+>>>>>>> d9b3d7c22f42c8403746298447bef53170543589
 	f = open(answerfile)
 	for word in f:
-		if not ("~" in word):
+		if not ("-" in word):
 			#words in x_num_num -> [x,num,num]
+			word = word.strip()
 			lst = word.split("_")
+			print lst
 			row = int(lst[1])
 			col = int(lst[2])
+<<<<<<< HEAD
 			if Globs.cross[row*Globs.m_row + col] != "":
 				print "TWO ITEMS IN SAME SPOT?"
 			Globs.cross[row*Globs.m_row + col] = lst[0]
+=======
+			if len(Globs.cross[(row * Globs.m_row) + col]) != 0:
+				print "TWO ITEMS IN SAME SPOT?"
+			Globs.cross[(Globs.m_row * row) + col].append(lst[0])
+>>>>>>> d9b3d7c22f42c8403746298447bef53170543589
 	f.close()
-	for r in range(Globs.m_row):
-		for c in range(Globs.m_col):
-			if c == Globs.m_col:
-				print(Globs.cross[r][c] + "\n"),
+	for i in range (Globs.m_row * Globs.m_col):
+			if (i % Globs.m_col == Globs.m_col-1):
+				print(Globs.cross[i][0] + "\n"),
 			else:
-				print(Globs.cross[r][c]),
+				print(Globs.cross[i][0]),
 
 def get_args():
 	if len(sys.argv) != 3:

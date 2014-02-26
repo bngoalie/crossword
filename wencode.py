@@ -16,15 +16,13 @@ class Glob:
 	m_row = 0 # grid row size
 	m_col = 0 # grid col size
 
-def print_set_variables():
+def add_set_variables():
 	for r in range(Glob.m_row):
 		for c in range(Glob.m_col):
 			if Glob.cross[(r * Glob.m_row) + c] != ".":
-				if (r == Glob.m_row -1 and c == Glob.m_row -1):
-					print(Glob.cross[(r * Glob.m_row) + c] + "_" + str(r) + "_" + str(c)),
-				else:
-					print(Glob.cross[(r * Glob.m_row) + c] + "_" + str(r) + "_" + str(c) + " &\n"),
-
+				if not (Glob.cross[(r * Glob.m_row) + c] in Glob.hashmtrx[r * Glob.m_row + c]):
+					Glob.hashmtrx[r * Glob.m_row + c].append(Glob.cross[(r * Glob.m_row) + c])
+				# print(Glob.cross[(r * Glob.m_row) + c] + "_" + str(r) + "_" + str(c) + " &\n"),
 
 # helper for outer loops
 def inner_loop(key, row, col, direction):
@@ -57,16 +55,15 @@ def inner_loop(key, row, col, direction):
 				inner_loop(prefix, row, col + 1, direction)
 			else:
 				inner_loop(prefix, row + 1, col, direction)
-		if key != "":
-			if not (key[-1] in Glob.hashmtrx[(row * Glob.m_row) + col]):
-				Glob.hashmtrx[(row * Glob.m_row) + col].append(key[-1])
+		if not (key[-1] in Glob.hashmtrx[(row * Glob.m_row) + col]):
+			Glob.hashmtrx[(row * Glob.m_row) + col].append(key[-1])
 
 def horiz_outer_loop():
-	for r in range(1, Glob.m_row - 2):
+	for r in range(1, Glob.m_row - 1):
 		inner_loop("#", r, 0, "H")
 
 def vert_outer_loop():
-	for c in range(1, Glob.m_col - 2):
+	for c in range(1, Glob.m_col - 1):
 		inner_loop("#", 0, c, "V")
 
 def one_per_block():
@@ -77,7 +74,10 @@ def one_per_block():
 					print("~" + Glob.hashmtrx[(r * Glob.m_row) + c][i] + "_" + str(r) + "_" + str(c) + " v ~" + Glob.hashmtrx[(r * Glob.m_row) + c][j] + "_" + str(r) + "_" + str(c) + " &\n"),
 			for item in Glob.hashmtrx[(r * Glob.m_row) + c]:
 				if item == Glob.hashmtrx[(r * Glob.m_row) + c][len(Glob.hashmtrx[(r * Glob.m_row) + c]) -1]:
-					print(item + "_" + str(r) + "_" + str(c) + " &\n"),
+					if (r * c == ((Glob.m_row - 1) * (Glob.m_col - 1))):
+						print(item + "_" + str(r) + "_" + str(c)),
+					else:
+						print(item + "_" + str(r) + "_" + str(c) + " &\n"),
 				else:
 					print(item + "_" + str(r) + "_" + str(c) + " v "),
 
@@ -133,8 +133,9 @@ def main():
 
 	horiz_outer_loop()
 	vert_outer_loop()
+	add_set_variables()
 	one_per_block()
-	print_set_variables()
+	# print Glob.hashmtrx
 
 
 if __name__ == '__main__':

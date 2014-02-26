@@ -2,10 +2,9 @@
 import sys, os
 
 def main():
-	hasnegated = False
-	hasword = False
 	f = open("temp")
 	for line in f:
+		hasword = False
 		weight = 1
 		tempwords = line.split()
 		literals = [i for i in tempwords if (i != "v" and i != "&")]
@@ -16,7 +15,21 @@ def main():
 					weight += 1
 			weight = (2 * weight) + 1
 		if weight > 1:
-			print("w:" + str(weight) + " " + line),
+			print ("w:" + str(weight) + " " + literals[0]),
+			for lit in literals:
+				if lit[0] == "#":
+					hasword = True
+				elif lit[0:2] != "~#":
+					print(" v " + lit),
+			print(" &\n"),
+			if hasword:
+				weight += 100
+				print ("w:" + str(weight) + " " + literals[0]),
+				for lit in literals:
+					
+					if lit[0:2] != "~#" and (lit[0] == "~" or lit[0] == "#"):
+						print(" v " + lit),
+				print(" &\n"),
 		else:
 			print(line),
 

@@ -16,16 +16,18 @@ class Glob:
 	m_row = 0 # grid row size
 	m_col = 0 # grid col size
 
-def add_set_variables():
+def print_set_variables():
 	for r in range(Glob.m_row):
 		for c in range(Glob.m_col):
 			if Glob.cross[(r * Glob.m_row) + c] != ".":
 				if not (Glob.cross[(r * Glob.m_row) + c] in Glob.hashmtrx[r * Glob.m_row + c]):
 					Glob.hashmtrx[r * Glob.m_row + c].append(Glob.cross[(r * Glob.m_row) + c])
-				# print(Glob.cross[(r * Glob.m_row) + c] + "_" + str(r) + "_" + str(c) + " &\n"),
+				print(Glob.cross[(r * Glob.m_row) + c] + "_" + str(r) + "_" + str(c) + " &\n"),
 
 # helper for outer loops
 def inner_loop(key, row, col, direction):
+	if not (key[-1] in Glob.hashmtrx[(row * Glob.m_row) + col]):
+		Glob.hashmtrx[(row * Glob.m_row) + col].append(key[-1])
 	if (direction == "H" and col < Glob.m_col - 1) or (direction == "V" and row < Glob.m_row - 1):
 		lst = Glob.trie_dict.get(key)
 		for i in range(len(key)):
@@ -55,8 +57,6 @@ def inner_loop(key, row, col, direction):
 				inner_loop(prefix, row, col + 1, direction)
 			else:
 				inner_loop(prefix, row + 1, col, direction)
-		if not (key[-1] in Glob.hashmtrx[(row * Glob.m_row) + col]):
-			Glob.hashmtrx[(row * Glob.m_row) + col].append(key[-1])
 
 def horiz_outer_loop():
 	for r in range(1, Glob.m_row - 1):
@@ -131,9 +131,9 @@ def main():
 	make_trie(wordlist) # set up the dictionary list
 	make_crossmtrx(puzzle)
 
+	print_set_variables()
 	horiz_outer_loop()
 	vert_outer_loop()
-	add_set_variables()
 	one_per_block()
 	# print Glob.hashmtrx
 

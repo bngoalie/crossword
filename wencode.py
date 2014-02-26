@@ -62,11 +62,11 @@ def inner_loop(key, row, col, direction):
 				Glob.hashmtrx[(row * Glob.m_row) + col].append(key[-1])
 
 def horiz_outer_loop():
-	for r in range(Glob.m_row):
+	for r in range(1, Glob.m_row - 1):
 		inner_loop("#", r, 0, "H")
 
 def vert_outer_loop():
-	for c in range(Glob.m_col):
+	for c in range(1, Glob.m_col - 1):
 		inner_loop("#", 0, c, "V")
 
 def one_per_block():

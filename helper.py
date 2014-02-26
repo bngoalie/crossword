@@ -23,13 +23,14 @@ def main():
 					print(" v " + lit),
 			print(" &\n"),
 			if hasword:
-				weight += 100
-				print ("w:" + str(weight) + " " + literals[0]),
-				for lit in literals:
-					
-					if lit[0:2] != "~#" and (lit[0] == "~" or lit[0] == "#"):
-						print(" v " + lit),
-				print(" &\n"),
+	                      if literals[1][0] != "~":
+	                              print ("w:1 " +literals[0]),
+	                      else:
+	                              print (literals[0]),
+	                      for lit in literals:
+	                              if lit[0:2] != "~#" and (lit[0] == "~" or lit[0] == "#"):
+	                                      print(" v " + lit),
+	                      print(" &\n"),
 		else:
 			print(line),
 

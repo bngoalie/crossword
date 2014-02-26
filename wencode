@@ -1,0 +1,4 @@
+#!/bin/sh
+
+python wencode.py $* > temp
+python helper.py
